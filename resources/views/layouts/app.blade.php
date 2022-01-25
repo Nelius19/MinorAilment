@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'MinorAilment') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -21,20 +21,28 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm md:px-8">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'MinorAilment') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
+                    @if (Auth::check() && Auth::user()->role == 'doctor')
+                    <div class="hidden lg:block text-uppercase ml-auto">
+                        <ul class="nav nav-second-level text-uppercase font-bold mt-2">
+                            <li class="">
+                                <a href="{{route('home')}}" class="mr-5 px-1 px-2 hover:no-underline hover:text-blue-300">Home</a>
+                            </li>
+                            <li class="">
+                                <a href="{{route('appointments')}}" class="px-1 py-2 hover:no-underline hover:text-blue-300">Appointments</a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -52,9 +60,18 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown flex">
+                                @if (Auth::check() && Auth::user()->role == 'doctor')
+                                <li class="sm:block md:hidden">
+                                    <a href="{{route('home')}}" class="mr-5 px-1 px-2 hover:no-underline hover:text-blue-300">Home</a>
+                                </li>
+                                <li class="sm:block md:hidden">
+                                    <a href="{{route('appointments')}}" class="px-1 py-2 hover:no-underline hover:text-blue-300">Appointments</a>
+                                </li>
+                                @endif
+
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->firstname }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -75,7 +92,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="bg-gray-200">
             @yield('content')
         </main>
     </div>
